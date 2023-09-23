@@ -1,0 +1,14 @@
+version: '3.9'
+
+networks:
+  doceasy:
+    external: true
+
+services:
+  postgres:
+      image: postgres:latest
+      container_name: postgres
+      ports:
+        - 5858:5432
+      environment:
+        - POSTGRES_PASSWORD=postgres
