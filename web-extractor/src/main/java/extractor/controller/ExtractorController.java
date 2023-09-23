@@ -22,11 +22,12 @@ public class ExtractorController {
 	}
 	
 	@GetMapping("/init")
-	public String init(@RequestParam(name = "orgao") OrganEnum orgao) {
+	public String init(@RequestParam(name = "orgao") OrganEnum orgao) throws Exception {
 		try {
-			context.init(orgao);
+			context.tryExtract(orgao);
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		}
 		
 		return "sucess!";

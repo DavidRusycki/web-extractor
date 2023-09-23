@@ -12,14 +12,14 @@ public class ExtractorServiceContext {
 	private ExtractorServiceStrategy strategy;
 
 	/**
-	 * Inicia o processamento de acordo com a estratégia.
+	 * Tenta extrair as informações de acordo com a estratégia.
 	 * @param organ
 	 * @return
 	 * @throws Exception
 	 */
-	public ResponseDto init(OrganEnum organ) throws Exception {
+	public ResponseDto tryExtract(OrganEnum organ) throws Exception {
 		strategy = ExtractorFactory.create(organ);
-		var response = strategy.init();
+		var response = strategy.tryExtract();
 		
 		return response;
 	}

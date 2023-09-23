@@ -5,7 +5,7 @@ import extractor.dto.ResponseDto;
 public class IPMExtractorService extends ExtractorServiceStrategy {
 
 	@Override
-	public ResponseDto init() {
+	public ResponseDto tryExtract() {
 		
 		System.out.println("chegou na IPM");
 		
