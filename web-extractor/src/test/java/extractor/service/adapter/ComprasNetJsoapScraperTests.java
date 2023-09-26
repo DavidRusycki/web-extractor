@@ -2,6 +2,8 @@ package extractor.service.adapter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -178,6 +180,27 @@ public class ComprasNetJsoapScraperTests {
 	
 	public ComprasNetJsoapScraper getStandartInstance() {
 		return new ComprasNetJsoapScraper();
+	}
+	
+	public Document getDocumentOfDownloadPage() {
+		
+//		
+//		try {
+//
+//			
+//			File file = new File("/home/david/dev/java/web-extractor/Compras.gov.br.download.html");
+//			
+//			FileInputStream fis = new FileInputStream(file);
+//			
+//			for
+//			
+//			String content = "";
+//			
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+//		
+		return null;
 	}
 	
 }

@@ -11,12 +11,14 @@ import java.util.stream.Collectors;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.hibernate.property.access.internal.PropertyAccessStrategyNoopImpl;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import extractor.dto.ComprasNetDTO;
 import extractor.exception.ScrapPageException;
 import extractor.service.properties.ComprasNetPropertiesService;
 import lombok.Data;
@@ -24,6 +26,7 @@ import lombok.Data;
 @Data
 public class ComprasNetJsoapScraper extends ScrapingAdapter {
 	
+	private Integer requests = 0;
 	private Document document;
 	private ArrayList<String> DownloadUrls = new ArrayList<String>();
 	private ArrayList<String> ConsultUrls = new ArrayList<String>();
@@ -58,7 +61,10 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 	}
 
 	private void mountAllDownloadUrls() throws Exception {
-		for (String actualUrl : ConsultUrls) {
+		for (int indice = 0; indice < ConsultUrls.size(); indice++) {
+			String actualUrl = ConsultUrls.get(indice);			
+			indice = ConsultUrls.size(); 
+			
 			updateDocumentContent(actualUrl);
 			mountUrlListFromPageElements();
 			makeNextConsultUrl(actualUrl);
@@ -66,6 +72,7 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 	}
 	
 	private void updateDocumentContent(String actualUrl) throws Exception {
+		System.out.println("Realizando request: " + ++requests);
 		document = Jsoup.connect(actualUrl).get();
 	}
 	
@@ -128,10 +135,75 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 	}
 	
 	private void scrapAllOpportunities() throws Exception {
-		for (String opportunityUrl : DownloadUrls) {
-			updateDocumentContent(opportunityUrl);
+		
+		System.out.println("scraping opportinities");
+		
+		for (int indice = 0; indice < DownloadUrls.size(); indice++) {
+			String opportunityUrl = DownloadUrls.get(indice);			
+			indice = DownloadUrls.size();
 			
+			updateDocumentContent(opportunityUrl);
+			scrapDownloadPage(document);
 		}
+	}
+	
+	protected void scrapDownloadPage(Document document) {
+		ComprasNetDTO dto = new ComprasNetDTO();
+		loadOrgao(dto);
+		loadUasg(dto);
+		loadModalidade(dto);
+		loadObjeto(dto);
+//		loadDataEdital(dto);
+//		loadEndereco(dto);
+//		loadTelefone(dto);
+//		loadFax(dto);
+//		loadDataEntregaProposta(dto);
+//		loadItens(dto);
+//		loadUrlEdital(dto);
+		
+		Element orgao = document.select("body > table:nth-child(3) > tbody > tr:nth-child(2) > td > table:nth-child(2) > tbody > tr:nth-child(1) > td.tex3 > table > tbody > tr:nth-child(1) > td > p").first();
+	}
+	
+	protected void loadOrgao(ComprasNetDTO dto) {
+		Element tabela = this.getOrgaoTable();
+		Element last = tabela.select("p").last();
+		Elements pElements = tabela.select("p");
+		//Remove o último pois ele é o código da UASG
+		pElements.remove(last);
+		
+		StringBuilder builder = new StringBuilder();
+		for (Element element : pElements) {
+			builder.append(element.html()+";");
+		}
+		
+		dto.setOrgao(builder.toString());	
+	}
+	
+	protected void loadUasg(ComprasNetDTO dto) {
+		Element tabela = this.getOrgaoTable();
+		Element last = tabela.select("p").last();
+		String codigo = last.html().replaceAll("[\\D]", "");
+		
+		
+		dto.setUasg(Integer.parseInt(codigo));
+	}
+	
+	protected void loadModalidade(ComprasNetDTO dto) {
+		Element element = document.select("body > table:nth-child(3) > tbody > tr:nth-child(2) > td > table:nth-child(2) > tbody > tr:nth-child(2) > td.tex3 > table > tbody > tr > td > p > span.tex3b").first();
+		
+		dto.setModalidade(element.html());
+	}
+	
+	protected void loadObjeto(ComprasNetDTO dto) {
+		Element element = document.select("/html/body/table[2]/tbody/tr[2]/td/table[2]/tbody/tr[2]/td[2]/table/tbody/tr/td/p/text()[1]").first();
+		
+		dto.setObjeto(element.html());
+	}
+	
+	protected Element getOrgaoTable() {
+		Element tabela = document.select("body > table:nth-child(3) > tbody > tr:nth-child(2) > td > table:nth-child(2) > tbody > tr:nth-child(1) > td.tex3 > table > tbody").first();
+		
+		return tabela;
 	}
 	
 	@Override
