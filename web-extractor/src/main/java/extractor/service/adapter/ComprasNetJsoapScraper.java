@@ -153,11 +153,11 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 		loadUasg(dto);
 		loadModalidade(dto);
 		loadObjeto(dto);
-//		loadDataEdital(dto);
-//		loadEndereco(dto);
-//		loadTelefone(dto);
-//		loadFax(dto);
-//		loadDataEntregaProposta(dto);
+		loadDataEdital(dto);
+		loadEndereco(dto);
+		loadTelefone(dto);
+		loadFax(dto);
+		loadDataEntregaProposta(dto);
 //		loadItens(dto);
 //		loadUrlEdital(dto);
 		
@@ -195,9 +195,39 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 	}
 	
 	protected void loadObjeto(ComprasNetDTO dto) {
-		Element element = document.select("/html/body/table[2]/tbody/tr[2]/td/table[2]/tbody/tr[2]/td[2]/table/tbody/tr/td/p/text()[1]").first();
+		Elements elements = document.select("body > table:nth-child(3) > tbody > tr:nth-child(2) > td > table:nth-child(2) > tbody > tr:nth-child(2) > td.tex3 > table > tbody > tr > td");
 		
-		dto.setObjeto(element.html());
+		dto.setObjeto(elements.first().childNodes().get(0).childNode(4).toString());
+	}
+	
+	protected void loadDataEdital(ComprasNetDTO dto) {
+		Elements elements = document.select("body > table:nth-child(3) > tbody > tr:nth-child(2) > td > table:nth-child(2) > tbody > tr:nth-child(2) > td.tex3 > table > tbody > tr > td");
+		
+		dto.setDataEdital(elements.first().childNodes().get(0).childNode(7).toString());
+	}
+	
+	protected void loadEndereco(ComprasNetDTO dto) {
+		Elements elements = document.select("body > table:nth-child(3) > tbody > tr:nth-child(2) > td > table:nth-child(2) > tbody > tr:nth-child(2) > td.tex3 > table > tbody > tr > td");
+		
+		dto.setEndereco(elements.first().childNodes().get(0).childNode(10).toString());
+	}
+	
+	protected void loadTelefone(ComprasNetDTO dto) {
+		Elements elements = document.select("body > table:nth-child(3) > tbody > tr:nth-child(2) > td > table:nth-child(2) > tbody > tr:nth-child(2) > td.tex3 > table > tbody > tr > td");
+		
+		dto.setTelefone(elements.first().childNodes().get(0).childNode(13).toString());
+	}
+	
+	protected void loadFax(ComprasNetDTO dto) {
+		Elements elements = document.select("body > table:nth-child(3) > tbody > tr:nth-child(2) > td > table:nth-child(2) > tbody > tr:nth-child(2) > td.tex3 > table > tbody > tr > td");
+		
+		dto.setFax(elements.first().childNodes().get(0).childNode(16).toString());
+	}
+	
+	protected void loadDataEntregaProposta(ComprasNetDTO dto) {
+		Elements elements = document.select("body > table:nth-child(3) > tbody > tr:nth-child(2) > td > table:nth-child(2) > tbody > tr:nth-child(2) > td.tex3 > table > tbody > tr > td");
+		
+		dto.setDataEntregaProposta(elements.first().childNodes().get(0).childNode(19).toString());
 	}
 	
 	protected Element getOrgaoTable() {
