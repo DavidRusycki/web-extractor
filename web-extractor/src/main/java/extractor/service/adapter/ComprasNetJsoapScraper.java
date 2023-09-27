@@ -3,6 +3,7 @@ package extractor.service.adapter;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,6 @@ import java.util.stream.Collectors;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
-import org.hibernate.property.access.internal.PropertyAccessStrategyNoopImpl;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -79,7 +79,7 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 	
 	private void updateDocumentContent(String actualUrl) throws Exception {
 		System.out.println("Realizando request: " + ++requests);
-		document = Jsoup.connect(actualUrl).get();
+		document = Jsoup.parse(new URL(actualUrl).openStream(), "ISO-8859-1", actualUrl);
 	}
 	
 	private void mountUrlListFromPageElements() {
@@ -151,7 +151,6 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 			updateDocumentContent(opportunityUrl);
 			scrapDownloadPage(document);
 		}
-		dtos = dtos;
 		System.out.println("Finalizando scraping das páginas.");
 	}
 	
