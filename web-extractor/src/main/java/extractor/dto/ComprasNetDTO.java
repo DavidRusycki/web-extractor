@@ -16,7 +16,15 @@ public class ComprasNetDTO {
 	private String telefone;
 	private String fax;
 	private String dataEntregaProposta;
-	private ArrayList<ItemServicoDTO> itens;
+	private ArrayList<ItemServicoDTO> itens = new ArrayList<ItemServicoDTO>();
 	private String urlEdital;
+	
+	public void addItem(ItemServicoDTO dto) {
+		itens.add(dto);
+	}
+	
+	public void removeItem(ItemServicoDTO dto) {
+		itens.remove(dto);
+	}
 	
 }

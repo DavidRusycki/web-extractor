@@ -12,4 +12,8 @@ public class ComprasNetPropertiesService {
 		return "http://comprasnet.gov.br/ConsultaLicitacoes/download/download_editais_detalhe.asp";
 	}
 	
+	public static String getBaseUrl() {
+		return "http://comprasnet.gov.br";
+	}
+	
 }

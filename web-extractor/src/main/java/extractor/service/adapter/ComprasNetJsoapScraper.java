@@ -7,6 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.http.NameValuePair;
@@ -19,6 +21,7 @@ import org.jsoup.select.Elements;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import extractor.dto.ComprasNetDTO;
+import extractor.dto.ItemServicoDTO;
 import extractor.exception.ScrapPageException;
 import extractor.service.properties.ComprasNetPropertiesService;
 import lombok.Data;
@@ -32,6 +35,8 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 	private ArrayList<String> ConsultUrls = new ArrayList<String>();
 	private String consultUrl;
 	private String downloadUrl;
+	private String urlBase;
+	private ArrayList<ComprasNetDTO> dtos = new ArrayList<ComprasNetDTO>();
 	
 	public ComprasNetJsoapScraper() {
 		loadUrls();
@@ -40,6 +45,7 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 	private void loadUrls() {
 		this.consultUrl = ComprasNetPropertiesService.getConsultUrl();
 		this.downloadUrl = ComprasNetPropertiesService.getDownloadUrl();
+		this.urlBase = ComprasNetPropertiesService.getBaseUrl();
 	}
 	
 	@Override
@@ -63,7 +69,7 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 	private void mountAllDownloadUrls() throws Exception {
 		for (int indice = 0; indice < ConsultUrls.size(); indice++) {
 			String actualUrl = ConsultUrls.get(indice);			
-			indice = ConsultUrls.size(); 
+//			indice = ConsultUrls.size();
 			
 			updateDocumentContent(actualUrl);
 			mountUrlListFromPageElements();
@@ -140,11 +146,13 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 		
 		for (int indice = 0; indice < DownloadUrls.size(); indice++) {
 			String opportunityUrl = DownloadUrls.get(indice);			
-			indice = DownloadUrls.size();
+//			indice = DownloadUrls.size();
 			
 			updateDocumentContent(opportunityUrl);
 			scrapDownloadPage(document);
 		}
+		dtos = dtos;
+		System.out.println("Finalizando scraping das páginas.");
 	}
 	
 	protected void scrapDownloadPage(Document document) {
@@ -158,10 +166,10 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 		loadTelefone(dto);
 		loadFax(dto);
 		loadDataEntregaProposta(dto);
-//		loadItens(dto);
-//		loadUrlEdital(dto);
-		
-		Element orgao = document.select("body > table:nth-child(3) > tbody > tr:nth-child(2) > td > table:nth-child(2) > tbody > tr:nth-child(1) > td.tex3 > table > tbody > tr:nth-child(1) > td > p").first();
+        loadItens(dto);
+		loadUrlEdital(dto);
+        
+        dtos.add(dto);
 	}
 	
 	protected void loadOrgao(ComprasNetDTO dto) {
@@ -228,6 +236,40 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 		Elements elements = document.select("body > table:nth-child(3) > tbody > tr:nth-child(2) > td > table:nth-child(2) > tbody > tr:nth-child(2) > td.tex3 > table > tbody > tr > td");
 		
 		dto.setDataEntregaProposta(elements.first().childNodes().get(0).childNode(19).toString());
+	}
+	
+	protected void loadItens(ComprasNetDTO dto) {
+		Elements linesOfItensTable = document.select("body > table:nth-child(3) > tbody > tr:nth-child(2) > td > table:nth-child(2) > tbody > tr:nth-child(3) > td.tex3 > table > tbody > tr");
+		
+		for (Element line : linesOfItensTable) {
+			ItemServicoDTO ItemDto = new ItemServicoDTO();
+			
+			if ((line.select("span") != null) && (line.select("span").size() == 2)) {
+				Element content = line.select("td:nth-child(2) > span.tex3").first();
+				ItemDto.setConteudo(content.html());
+			}
+			else {
+				// Salva todo o conteúdo do HTML da linha caso for uma situação não prevista. Assim não se perde informações.
+				ItemDto.setConteudo(line.toString());
+			}
+			
+			dto.addItem(ItemDto);
+		}
+	}
+	
+	protected void loadUrlEdital(ComprasNetDTO dto) {
+		String scripts = document.select("script").last().html();
+		
+		String padrao = "'(/ConsultaLicitacoes/Download/Download\\.asp\\?[^']*)'";
+        Pattern pattern = Pattern.compile(padrao);
+        Matcher matcher = pattern.matcher(scripts);
+        String url = "não foi possível obter a url";
+        
+        if (matcher.find()) {
+            url = matcher.group(1);
+        }
+		
+        dto.setUrlEdital(urlBase+url);
 	}
 	
 	protected Element getOrgaoTable() {
