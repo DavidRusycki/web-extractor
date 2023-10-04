@@ -13,6 +13,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
 
+import extractor.service.scraper.adapter.ComprasNetJsoapScraper;
+
 public class ComprasNetJsoapScraperTests {
 
 	@Test

@@ -1,4 +1,4 @@
-package extractor.service.adapter;
+package extractor.service.scraper.adapter;
 
 import java.util.List;
 

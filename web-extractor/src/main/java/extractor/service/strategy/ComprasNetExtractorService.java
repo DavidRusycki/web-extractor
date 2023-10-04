@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import extractor.dto.BaseDto;
 import extractor.dto.ComprasNetDTO;
 import extractor.entity.ComprasNetEntity;
-import extractor.service.adapter.ComprasNetJsoapScraper;
-import extractor.service.adapter.ScrapingAdapter;
 import extractor.service.db.ComprasNetService;
+import extractor.service.scraper.adapter.ComprasNetJsoapScraper;
+import extractor.service.scraper.adapter.ScrapingAdapter;
 
 @Service
 public class ComprasNetExtractorService extends ExtractorServiceStrategy {
