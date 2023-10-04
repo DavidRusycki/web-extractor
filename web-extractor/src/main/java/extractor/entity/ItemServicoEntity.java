@@ -2,6 +2,7 @@ package extractor.entity;
 
 import java.math.BigInteger;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +21,7 @@ public class ItemServicoEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private BigInteger id;
 	
+	@Column(name = "id_oportunidade")
 	private BigInteger idOportunidade;
 	
 	@NotNull

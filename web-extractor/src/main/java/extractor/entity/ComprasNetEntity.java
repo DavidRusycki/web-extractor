@@ -1,18 +1,21 @@
 package extractor.entity;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
-import extractor.dto.ItemServicoDTO;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
 
 @Data
 @Entity
@@ -23,8 +26,6 @@ public class ComprasNetEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private BigInteger idOportunidade;
 	
-	@NotNull
-	@NotBlank
 	private String orgao;
 	
 	@NotNull
@@ -56,18 +57,16 @@ public class ComprasNetEntity {
 	@NotBlank
 	private String dataEntregaProposta;
 	
-//	private ArrayList<ItemServicoEntity> itens = new ArrayList<ItemServicoEntity>();
+	@ElementCollection
+	@CollectionTable(name = "tbitemcompras", joinColumns = @JoinColumn(name = "id_oportunidade"))
+	@Column(name = "conteudo")
+	private Set<String> itens = new HashSet<String>();
 	
 	@NotNull
 	@NotBlank
 	private String urlEdital;
 	
-//	public void addItem(ItemServicoEntity entity) {
-//		itens.add(entity);
-//	}
-//	
-//	public void removeItem(ItemServicoEntity entity) {
-//		itens.remove(entity);
-//	}
+	@NotNull
+	private Boolean visto = false;
 	
 }

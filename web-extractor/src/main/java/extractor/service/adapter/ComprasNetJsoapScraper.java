@@ -20,6 +20,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import extractor.dto.BaseDto;
 import extractor.dto.ComprasNetDTO;
 import extractor.dto.ItemServicoDTO;
 import extractor.exception.ScrapPageException;
@@ -36,7 +37,7 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 	private String consultUrl;
 	private String downloadUrl;
 	private String urlBase;
-	private ArrayList<ComprasNetDTO> dtos = new ArrayList<ComprasNetDTO>();
+	private ArrayList<BaseDto> dtos = new ArrayList<BaseDto>();
 	
 	public ComprasNetJsoapScraper() {
 		loadUrls();
@@ -145,8 +146,11 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 		System.out.println("scraping opportinities");
 		
 		for (int indice = 0; indice < DownloadUrls.size(); indice++) {
-			String opportunityUrl = DownloadUrls.get(indice);			
-//			indice = DownloadUrls.size();
+			String opportunityUrl = DownloadUrls.get(indice);
+			
+			if (indice == 15) {
+				indice = DownloadUrls.size();
+			}
 			
 			updateDocumentContent(opportunityUrl);
 			scrapDownloadPage(document);
@@ -156,6 +160,7 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 	
 	protected void scrapDownloadPage(Document document) {
 		ComprasNetDTO dto = new ComprasNetDTO();
+		
 		loadOrgao(dto);
 		loadUasg(dto);
 		loadModalidade(dto);
@@ -278,9 +283,8 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 	}
 	
 	@Override
-	public String getEntitys() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<BaseDto> getDtos() {
+		return dtos;
 	}
 
 }

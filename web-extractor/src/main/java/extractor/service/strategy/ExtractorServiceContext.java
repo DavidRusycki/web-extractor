@@ -1,5 +1,6 @@
 package extractor.service.strategy;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import extractor.dto.ResponseDto;
@@ -11,6 +12,9 @@ public class ExtractorServiceContext {
 
 	private ExtractorServiceStrategy strategy;
 
+	@Autowired
+	private ExtractorFactory factory;
+	
 	/**
 	 * Tenta extrair as informações de acordo com a estratégia.
 	 * @param organ
@@ -18,10 +22,10 @@ public class ExtractorServiceContext {
 	 * @throws Exception
 	 */
 	public ResponseDto tryExtract(OrganEnum organ) throws Exception {
-		strategy = ExtractorFactory.create(organ);
-		var response = strategy.tryExtract();
+		strategy = factory.create(organ);
+		strategy.tryExtract();
 		
-		return response;
+		return ResponseDto.getSucessResponse();
 	}
 	
 }

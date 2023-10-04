@@ -1,15 +1,15 @@
 package extractor.service.strategy;
 
-import extractor.dto.ResponseDto;
+import org.springframework.stereotype.Service;
 
+@Service
 public class IPMExtractorService extends ExtractorServiceStrategy {
 
 	@Override
-	public ResponseDto tryExtract() {
-		
+	public Boolean tryExtract() {
 		System.out.println("chegou na IPM");
 		
-		return null;
+		return true;
 	}
 
 }
