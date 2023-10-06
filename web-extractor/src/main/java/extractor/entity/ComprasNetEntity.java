@@ -47,8 +47,6 @@ public class ComprasNetEntity {
 	@NotBlank
 	private String endereco;
 	
-	@NotNull
-	@NotBlank
 	private String telefone;
 	
 	private String fax;

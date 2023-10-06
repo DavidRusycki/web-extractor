@@ -8,8 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.http.NameValuePair;
@@ -22,7 +20,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import extractor.dto.BaseDto;
 import extractor.dto.ComprasNetDTO;
-import extractor.dto.ItemServicoDTO;
 import extractor.exception.ScrapPageException;
 import extractor.service.properties.ComprasNetPropertiesService;
 import extractor.service.scraper.comprasnet.Scraper;
@@ -49,7 +46,7 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 	private String consultUrl;
 	private String downloadUrl;
 	private ArrayList<BaseDto> dtos = new ArrayList<BaseDto>();
-	private List<Scraper> scrapers;
+	private List<Scraper> scrapers = new ArrayList<Scraper>();
 	
 	public ComprasNetJsoapScraper() {
 		loadUrls();

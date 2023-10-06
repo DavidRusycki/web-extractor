@@ -15,6 +15,7 @@ public class ExtractorFactory {
 
 	@Autowired
 	private ComprasNetExtractorService comprasNetExtractorService;
+	
 	@Autowired
 	private IPMExtractorService ipmExtractorService;
 	

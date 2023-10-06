@@ -20,4 +20,8 @@ public abstract class Scraper {
 		return tabela;
 	}
 	
+	protected String removeNonBreakingSpace(String content) {
+		return content.replaceAll("&nbsp;", "");
+	}
+	
 }

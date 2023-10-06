@@ -9,8 +9,9 @@ public class TelefoneScraper extends Scraper {
 	@Override
 	public void scrap() {
 		Elements elements = document.select("body > table:nth-child(3) > tbody > tr:nth-child(2) > td > table:nth-child(2) > tbody > tr:nth-child(2) > td.tex3 > table > tbody > tr > td");
+		String result = elements.first().childNodes().get(0).childNode(13).toString();		
 		
-		dto.setTelefone(elements.first().childNodes().get(0).childNode(13).toString());
+		dto.setTelefone(removeNonBreakingSpace(result));
 	}
 
 }

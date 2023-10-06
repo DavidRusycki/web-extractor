@@ -184,25 +184,4 @@ public class ComprasNetJsoapScraperTests {
 		return new ComprasNetJsoapScraper();
 	}
 	
-	public Document getDocumentOfDownloadPage() {
-		
-//		
-//		try {
-//
-//			
-//			File file = new File("/home/david/dev/java/web-extractor/Compras.gov.br.download.html");
-//			
-//			FileInputStream fis = new FileInputStream(file);
-//			
-//			for
-//			
-//			String content = "";
-//			
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//		}
-//		
-		return null;
-	}
-	
 }

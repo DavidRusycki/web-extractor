@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import extractor.dto.ResponseDto;
-import extractor.entity.ComprasNetEntity;
 import extractor.enums.OrganEnum;
-import extractor.service.db.ComprasNetService;
 import extractor.service.strategy.ExtractorServiceContext;
 
 @RestController
