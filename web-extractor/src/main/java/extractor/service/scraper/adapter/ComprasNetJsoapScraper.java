@@ -16,11 +16,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import extractor.dto.BaseDto;
 import extractor.dto.ComprasNetDTO;
 import extractor.exception.ScrapPageException;
+import extractor.service.db.ComprasNetService;
 import extractor.service.properties.ComprasNetPropertiesService;
 import extractor.service.scraper.comprasnet.Scraper;
 import extractor.service.scraper.comprasnet.jsoap.DataEditalScraper;
@@ -38,6 +41,8 @@ import lombok.Data;
 
 @Data
 public class ComprasNetJsoapScraper extends ScrapingAdapter {
+	
+	public static final Logger logger = LoggerFactory.getLogger(ComprasNetJsoapScraper.class);
 	
 	private Integer requests = 0;
 	private Document document;
@@ -99,7 +104,7 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 	}
 	
 	private void updateDocumentContent(String actualUrl) throws Exception {
-		System.out.println("Realizando request: " + ++requests);
+		logger.info("Realizando request: " + ++requests);
 		document = Jsoup.parse(new URL(actualUrl).openStream(), "ISO-8859-1", actualUrl);
 	}
 	
@@ -162,7 +167,7 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 	}
 	
 	private void scrapAllOpportunities() throws Exception {
-		System.out.println("scraping opportinities");
+		logger.info("scraping opportinities");
 		
 		for (int indice = 0; indice < DownloadUrls.size(); indice++) {
 			String opportunityUrl = DownloadUrls.get(indice);
@@ -170,7 +175,7 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 			updateDocumentContent(opportunityUrl);
 			scrapDownloadPage(document);
 		}
-		System.out.println("Finalizando scraping das páginas.");
+		logger.info("Finalizando scraping das páginas.");
 	}
 	
 	protected void scrapDownloadPage(Document document) {

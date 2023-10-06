@@ -4,6 +4,8 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ import extractor.repository.ComprasNetRepository;
 @Service
 public class ComprasNetService {
 
+	public static final Logger logger = LoggerFactory.getLogger(ComprasNetService.class);
+	
 	@Autowired
 	private ComprasNetRepository repository;
 	
@@ -30,7 +34,7 @@ public class ComprasNetService {
 	}
 	
 	public ComprasNetEntity insert(ComprasNetEntity entity) {
-		System.out.println("Inserindo entidade");
+		logger.info("Inserindo entidade");
 		return repository.save(entity);
 	}
 	

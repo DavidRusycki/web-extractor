@@ -3,6 +3,8 @@ package extractor.service.strategy;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import extractor.service.scraper.adapter.ScrapingAdapter;
 @Service
 public class ComprasNetExtractorService extends ExtractorServiceStrategy {
 
+	public static final Logger logger = LoggerFactory.getLogger(ComprasNetExtractorService.class);
+	
 	@Autowired
 	private ComprasNetService service;
 	private ScrapingAdapter adapter;
@@ -36,27 +40,27 @@ public class ComprasNetExtractorService extends ExtractorServiceStrategy {
 	}
 
 	private List<ComprasNetDTO> castList(List<BaseDto> dtoList) {
-		System.out.println("Realizando casting");
+		logger.info("Realizando casting");
 		List<ComprasNetDTO> dtos = dtoList.stream().map(dto -> (ComprasNetDTO)dto).collect(Collectors.toList());
-		System.out.println("Casting finalizado");
+		logger.info("Casting finalizado");
 		
 		return dtos; 
 	}
 	
 	private List<ComprasNetEntity> convertDtoToEntities(List<ComprasNetDTO> dtos) {
-		System.out.println("Convertendo para entidades");
+		logger.info("Convertendo para entidades");
 		List<ComprasNetEntity> entities = dtos.stream().map(dto -> ComprasNetDTO.toEntity(dto)).collect(Collectors.toList());
-		System.out.println("Converção finalizada");
+		logger.info("Converção finalizada");
 		
 		return entities;
 	}
 	
 	private void saveAllEntities(List<ComprasNetEntity> entities) {
-		System.out.println("Salvando entidades");
+		logger.info("Salvando entidades");
 		for (ComprasNetEntity comprasNetEntity : entities) {
 			service.insert(comprasNetEntity);
 		}
-		System.out.println("entidades salvas");
+		logger.info("entidades salvas");
 	}
 	
 }
