@@ -88,7 +88,6 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 		} catch (Exception e) {
 			throw new ScrapPageException("Falha ao realizar scraping" + e.getMessage());
 		}
-		
 	}
 
 	private void mountAllDownloadUrls() throws Exception {

@@ -1,4 +1,4 @@
-package extractor.service.adapter;
+package extractor.service.scraper.adapter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
