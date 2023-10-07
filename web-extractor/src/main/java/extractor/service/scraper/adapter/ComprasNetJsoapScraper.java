@@ -94,8 +94,7 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 
 	private void mountAllDownloadUrls() throws Exception {
 		for (int indice = 0; indice < ConsultUrls.size(); indice++) {
-			String actualUrl = ConsultUrls.get(indice);			
-//			indice = ConsultUrls.size();
+			String actualUrl = ConsultUrls.get(indice);
 			
 			updateDocumentContent(actualUrl);
 			mountUrlListFromPageElements();
@@ -171,7 +170,7 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 		
 		for (int indice = 0; indice < DownloadUrls.size(); indice++) {
 			String opportunityUrl = DownloadUrls.get(indice);
-
+			
 			updateDocumentContent(opportunityUrl);
 			scrapDownloadPage(document);
 		}
@@ -184,7 +183,13 @@ public class ComprasNetJsoapScraper extends ScrapingAdapter {
 		for (Scraper scraper : scrapers) {
 			scraper.setDto(dto);
 			scraper.setDocument(document);
-			scraper.scrap();
+			
+			try {
+				scraper.scrap();				
+			} catch (Exception e) {
+				logger.error("Falha ao realizar scraping da informação"+e.getMessage());
+			}
+			
 		}
         
 		dtos.add(dto);

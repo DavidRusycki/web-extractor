@@ -39,20 +39,14 @@ public class ComprasNetEntity {
 	@NotBlank
 	private String objeto;
 	
-	@NotNull
-	@NotBlank
 	private String dataEdital;
 	
-	@NotNull
-	@NotBlank
 	private String endereco;
 	
 	private String telefone;
 	
 	private String fax;
 	
-	@NotNull
-	@NotBlank
 	private String dataEntregaProposta;
 	
 	@ElementCollection
